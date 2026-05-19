@@ -1,0 +1,33 @@
+# Build directories
+.build/
+
+# Xcode build artifacts
+build/
+DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcworkspace
+*.xcuserdata
+
+# macOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Package manager
+Package.resolved
+
+# Test coverage
+*.gcda
+*.gcno
+
+# Swift Package Manager
+.swiftpm/
+
+# Archive files
+*.zip
+*.tar.gz
+*.pkg
