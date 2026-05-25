@@ -5,6 +5,7 @@ struct TaskRowView: View {
     let onToggle: () -> Void
     let onEdit: () -> Void
     let onDelete: () -> Void
+    let onCopyToToday: () -> Void
 
     var body: some View {
         HStack(spacing: 10) {
@@ -90,6 +91,14 @@ struct TaskRowView: View {
 
     private var actionButtons: some View {
         HStack(spacing: 4) {
+            Button(action: onCopyToToday) {
+                Image(systemName: "doc.on.doc")
+                    .font(.caption)
+            }
+            .buttonStyle(.plain)
+            .foregroundColor(.accentColor)
+            .help("复制到今天")
+
             Button(action: onEdit) {
                 Image(systemName: "pencil")
                     .font(.caption)

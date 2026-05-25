@@ -81,4 +81,9 @@ class TaskViewModel: ObservableObject {
         _ = repository.updateTask(task, isCompleted: !task.isCompleted)
         loadTasks()
     }
+
+    func copyTaskToToday(_ task: TaskEntity) {
+        _ = repository.copyTaskToToday(task)
+        loadTasks()
+    }
 }

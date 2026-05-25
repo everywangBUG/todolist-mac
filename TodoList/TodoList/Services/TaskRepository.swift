@@ -79,6 +79,20 @@ class TaskRepository {
         return true
     }
 
+    func copyTaskToToday(_ task: TaskEntity) -> TaskEntity? {
+        let today = Calendar.current.startOfDay(for: Date())
+        guard let copied = createTask(
+            title: task.title ?? "",
+            description: task.desc,
+            priority: task.priority,
+            dueDate: today,
+            category: task.category
+        ) else {
+            return nil
+        }
+        return copied
+    }
+
     // MARK: - Category CRUD
 
     func createCategory(name: String, color: String = "#007AFF") -> CategoryEntity? {

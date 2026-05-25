@@ -9,6 +9,12 @@ struct TaskListView: View {
     @State private var editingTask: TaskEntity? = nil
     @State private var showingAddCategory = false
     @State private var newCategoryName = ""
+    @State private var newCategoryColor = "#007AFF"
+
+    private let categoryColorOptions = [
+        "#007AFF", "#34C759", "#FF9500", "#FF3B30",
+        "#AF52DE", "#5856D6", "#FF2D55", "#5AC8FA"
+    ]
 
     private enum SidebarFilter: Hashable {
         case all
@@ -41,24 +47,13 @@ struct TaskListView: View {
             })
         }
         .sheet(isPresented: $showingCategoryManager) {
-            CategoryManagerView()
+            CategoryManagerView(categoryVM: categoryVM)
         }
         .sheet(isPresented: $showingImportExport) {
             ImportExportView()
         }
-        .alert("新增分类", isPresented: $showingAddCategory) {
-            TextField("分类名称", text: $newCategoryName)
-            Button("取消", role: .cancel) {
-                newCategoryName = ""
-            }
-            Button("添加") {
-                if !newCategoryName.trimmingCharacters(in: .whitespaces).isEmpty {
-                    categoryVM.addCategory(name: newCategoryName.trimmingCharacters(in: .whitespaces))
-                    newCategoryName = ""
-                }
-            }
-        } message: {
-            Text("输入分类名称")
+        .sheet(isPresented: $showingAddCategory) {
+            addCategorySheet
         }
         .onAppear {
             taskVM.loadTasks()
@@ -172,11 +167,63 @@ struct TaskListView: View {
                     editingTask = task
                 }, onDelete: {
                     taskVM.deleteTask(task)
+                }, onCopyToToday: {
+                    taskVM.copyTaskToToday(task)
                 })
                 .listRowInsets(EdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12))
             }
         }
         .listStyle(.plain)
+    }
+
+    // MARK: - Add Category Sheet
+
+    private var addCategorySheet: some View {
+        VStack(spacing: 16) {
+            Text("新增分类")
+                .font(.headline)
+
+            TextField("分类名称", text: $newCategoryName)
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 250)
+
+            HStack(spacing: 8) {
+                ForEach(categoryColorOptions, id: \.self) { color in
+                    Circle()
+                        .fill(Color(hex: color))
+                        .frame(width: 22, height: 22)
+                        .overlay(
+                            Circle()
+                                .stroke(Color.primary, lineWidth: newCategoryColor == color ? 2 : 0)
+                        )
+                        .onTapGesture {
+                            newCategoryColor = color
+                        }
+                }
+            }
+
+            HStack(spacing: 16) {
+                Button("取消") {
+                    newCategoryName = ""
+                    newCategoryColor = "#007AFF"
+                    showingAddCategory = false
+                }
+
+                Button("添加") {
+                    let name = newCategoryName.trimmingCharacters(in: .whitespaces)
+                    if !name.isEmpty {
+                        categoryVM.addCategory(name: name, color: newCategoryColor)
+                        newCategoryName = ""
+                        newCategoryColor = "#007AFF"
+                        showingAddCategory = false
+                    }
+                }
+                .keyboardShortcut(.defaultAction)
+                .disabled(newCategoryName.trimmingCharacters(in: .whitespaces).isEmpty)
+            }
+        }
+        .padding()
+        .frame(width: 350, height: 180)
     }
 
     // MARK: - Helpers

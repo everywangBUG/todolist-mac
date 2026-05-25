@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CategoryManagerView: View {
-    @StateObject private var categoryVM = CategoryViewModel()
+    @ObservedObject var categoryVM: CategoryViewModel
     @State private var showingAddCategory = false
     @State private var newCategoryName: String = ""
     @State private var newCategoryColor: String = "#007AFF"
