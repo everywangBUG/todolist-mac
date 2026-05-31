@@ -78,7 +78,7 @@ class TaskViewModel: ObservableObject {
     }
 
     func toggleComplete(_ task: TaskEntity) {
-        _ = repository.updateTask(task, isCompleted: !task.isCompleted)
+        _ = repository.updateTask(task, dueDate: task.dueDate, isCompleted: !task.isCompleted)
         loadTasks()
     }
 

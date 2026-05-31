@@ -65,7 +65,7 @@ class TaskRepository {
         if let title = title { task.title = title }
         if let description = description { task.desc = description }
         if let priority = priority { task.priority = priority }
-        if let dueDate = dueDate { task.dueDate = dueDate }
+        task.dueDate = dueDate
         if let category = category { task.category = category }
         if let isCompleted = isCompleted { task.isCompleted = isCompleted }
         task.updatedAt = Date()
